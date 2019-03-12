@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class MagicCryptTest extends TestCase
 {
-
     public function testEmptyStr()
     {
         $originalStr = '';

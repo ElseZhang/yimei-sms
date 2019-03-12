@@ -3,52 +3,48 @@
 namespace ElseZhang\YiMeiSms;
 
 use ElseZhang\YiMeiSms\Exceptions\Exception;
-use GuzzleHttp\Client;
 use ElseZhang\YiMeiSms\Exceptions\HttpException;
+use GuzzleHttp\Client;
 
 class Sms
 {
     /**
-     * APPID
+     * APPID.
      *
      * @var string
      */
     private $appId;
 
-
     /**
-     * 加密密钥
+     * 加密密钥.
      *
      * @var string
      */
     private $encryptKey;
-
 
     /**
      * 接口地址
      */
     const YM_SMS_ADDR = 'http://bjksmtn.b2m.cn:80';
 
-
     /**
-     * 发送单条短信接口
+     * 发送单条短信接口.
      */
     const YM_SMS_SEND_URI = '/inter/sendSingleSMS';
 
     /**
-     * 发送单条短信接口
+     * 发送单条短信接口.
      */
     const END = "\n";
 
-
     /**
-     * 是否开启GZIP
+     * 是否开启GZIP.
      */
     const EN_GZIP = true;
 
-
     /**
      * Sms constructor.
+     *
      * @param string $appId
      * @param string $encryptKey
      */
@@ -58,7 +54,6 @@ class Sms
         $this->encryptKey = $encryptKey;
     }
 
-
     /**
      * 单条短信发送
      *
@@ -67,23 +62,29 @@ class Sms
      * @param string $timerTime
      * @param string $customSmsId
      * @param string $extendedCode
-     * @param int $requestValidPeriod
+     * @param int    $requestValidPeriod
+     *
      * @return \stdClass
      */
     public function send(string $mobile, string $content,
-                         string $timerTime = "", string $customSmsId = "",
-                         string $extendedCode = "",
+                         string $timerTime = '', string $customSmsId = '',
+                         string $extendedCode = '',
                          int $requestValidPeriod = 120)
     {
-
         $item = new \stdClass();
         $item->mobile = $mobile;
         $item->content = $content;
 
         /* 选填内容 */
-        if ('' != $timerTime) $item->timerTime = $timerTime;
-        if ('' != $customSmsId) $item->customSmsId = $customSmsId;
-        if ('' != $extendedCode) $item->extendedCode = $extendedCode;
+        if ('' != $timerTime) {
+            $item->timerTime = $timerTime;
+        }
+        if ('' != $customSmsId) {
+            $item->customSmsId = $customSmsId;
+        }
+        if ('' != $extendedCode) {
+            $item->extendedCode = $extendedCode;
+        }
 
         $item->requestTime = $this->getMillisecond();
         $item->requestValidPeriod = $requestValidPeriod;
@@ -91,9 +92,10 @@ class Sms
         $jsonData = json_encode($item, JSON_UNESCAPED_UNICODE);
 
         $encryptObj = new MagicCrypt($this->encryptKey);
-        $sendData = $encryptObj->encrypt($jsonData);// 加密结果
+        $sendData = $encryptObj->encrypt($jsonData); // 加密结果
 
-        $url = self::YM_SMS_ADDR . self::YM_SMS_SEND_URI;
+        $url = self::YM_SMS_ADDR.self::YM_SMS_SEND_URI;
+
         try {
             $response = $this->httpRequest($url, $sendData);
             $headers = $response->getHeaders();
@@ -109,31 +111,34 @@ class Sms
         }
     }
 
-
     /**
      * HTTP 请求
      *
      * @param string $url
-     * @param null $data
-     * @return mixed|\Psr\Http\Message\ResponseInterface
+     * @param null   $data
+     *
      * @throws HttpException
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface
      */
     public function httpRequest(string $url, $data = null)
     {
         try {
             $client = new Client([
-                'timeout' => 30,
+                'timeout'         => 30,
                 'allow_redirects' => false,
-                'proxy' => '192.168.208.220:8888'
+                'proxy'           => '192.168.208.220:8888',
             ]);
             $headers = [
                 'appId' => $this->appId,
             ];
-            if (true == self::EN_GZIP) $headers['gzip'] = 'on';
+            if (true == self::EN_GZIP) {
+                $headers['gzip'] = 'on';
+            }
 
             $response = $client->request('POST', $url, [
                 'headers' => $headers,
-                'body' => $data
+                'body'    => $data,
             ]);
 
             return $response;
@@ -142,9 +147,8 @@ class Sms
         }
     }
 
-
     /**
-     * 返回当前 Unix 时间戳的毫秒数
+     * 返回当前 Unix 时间戳的毫秒数.
      *
      * @return float
      */
@@ -152,6 +156,6 @@ class Sms
     {
         list($microsec, $sec) = explode(' ', microtime());
 
-        return (float)sprintf('%.0f', (floatval($microsec) + floatval($sec)) * 1000);
+        return (float) sprintf('%.0f', (floatval($microsec) + floatval($sec)) * 1000);
     }
 }
