@@ -3,20 +3,16 @@
 namespace ElseZhang\YiMeiSms\Tests;
 
 use ElseZhang\YiMeiSms\Sms;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
 class SmsTest extends TestCase
 {
-
     public function testSend()
     {
-
     }
 
     public function testHttpRequest()
     {
-
     }
 
     public function testGetMillisecond()
