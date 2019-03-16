@@ -15,8 +15,6 @@
     },
     "require": {
         "guzzlehttp/guzzle": "^6.3",
-        "phpunit/phpunit": "^7.5",
-        "mockery/mockery": "^1.2",
         "illuminate/support": "^5.8"
     },
     "extra": {
@@ -25,5 +23,9 @@
                 "ElseZhang\\YiMeiSms\\ServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5",
+        "mockery/mockery": "^1.2"
     }
 }
