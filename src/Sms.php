@@ -159,12 +159,12 @@ class Sms
     /**
      * 返回当前 Unix 时间戳的毫秒数.
      *
-     * @return float
+     * @return string
      */
     public function getMillisecond()
     {
         list($microsec, $sec) = explode(' ', microtime());
 
-        return (float) sprintf('%.0f', (floatval($microsec) + floatval($sec)) * 1000);
+        return sprintf('%.0f', (floatval($microsec) + floatval($sec)) * 1000);
     }
 }

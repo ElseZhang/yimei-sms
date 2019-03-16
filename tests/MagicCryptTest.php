@@ -16,11 +16,18 @@ use PHPUnit\Framework\TestCase;
 
 class MagicCryptTest extends TestCase
 {
+    protected $magicCrypt;
+
+    protected function setUp()
+    {
+        $this->magicCrypt = new MagicCrypt('encrypt-key');
+    }
+
     public function testEmptyStr()
     {
         $originalStr = '';
 
-        $magicCrypt = new MagicCrypt('encrypt-key');
+        $magicCrypt = $this->magicCrypt;
         $encryptStr = $magicCrypt->encrypt($originalStr);
 
         $this->assertSame($originalStr, $magicCrypt->decrypt($encryptStr));
@@ -30,9 +37,14 @@ class MagicCryptTest extends TestCase
     {
         $originalStr = 'Hello World';
 
-        $magicCrypt = new MagicCrypt('encrypt-key');
+        $magicCrypt = $this->magicCrypt;
         $encryptStr = $magicCrypt->encrypt($originalStr);
 
         $this->assertSame($originalStr, $magicCrypt->decrypt($encryptStr));
+    }
+
+    protected function tearDown()
+    {
+        $this->magicCrypt = null;
     }
 }

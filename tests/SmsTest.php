@@ -16,6 +16,13 @@ use PHPUnit\Framework\TestCase;
 
 class SmsTest extends TestCase
 {
+    protected $sms;
+
+    protected function setUp()
+    {
+        $this->sms = new Sms('app-id', 'encrypt-key');
+    }
+
     public function testSend()
     {
     }
@@ -26,10 +33,14 @@ class SmsTest extends TestCase
 
     public function testGetMillisecond()
     {
-        $sms = new Sms('app-id', 'encrypt-key');
-        $millisecond = $sms->getMillisecond();
+        $millisecond = $this->sms->getMillisecond();
 
+        $this->assertRegExp('/^\d*$/', $millisecond);
         $this->assertEquals(13, strlen($millisecond));
-        $this->assertFalse(strpos('.', $millisecond));
+    }
+
+    protected function tearDown()
+    {
+        $this->sms = null;
     }
 }
