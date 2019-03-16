@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the elsezhang/yimei-sms.
+ *
+ * (c) overtrue <mzhang173@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace ElseZhang\YiMeiSms;
 
 use ElseZhang\YiMeiSms\Exceptions\Exception;
@@ -99,7 +108,7 @@ class Sms
         try {
             $response = $this->httpRequest($url, $sendData);
             $headers = $response->getHeaders();
-            if ($headers['result'] == 'SUCCESS') {
+            if ('SUCCESS' == $headers['result']) {
                 $body = $response->getBody();
 
                 return $encryptObj->decrypt($body->getContents());
@@ -125,9 +134,9 @@ class Sms
     {
         try {
             $client = new Client([
-                'timeout'         => 30,
+                'timeout' => 30,
                 'allow_redirects' => false,
-                'proxy'           => '192.168.208.220:8888',
+                'proxy' => '192.168.208.220:8888',
             ]);
             $headers = [
                 'appId' => $this->appId,
@@ -138,7 +147,7 @@ class Sms
 
             $response = $client->request('POST', $url, [
                 'headers' => $headers,
-                'body'    => $data,
+                'body' => $data,
             ]);
 
             return $response;
