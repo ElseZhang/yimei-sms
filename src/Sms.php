@@ -71,9 +71,9 @@ class Sms
      * @param string $timerTime
      * @param string $customSmsId
      * @param string $extendedCode
-     * @param int    $requestValidPeriod
-     *
-     * @return \stdClass
+     * @param int $requestValidPeriod
+     * @return bool|string
+     * @throws HttpException
      */
     public function send(string $mobile, string $content,
                          string $timerTime = '', string $customSmsId = '',
@@ -103,10 +103,8 @@ class Sms
         $encryptObj = new MagicCrypt($this->encryptKey);
         $sendData = $encryptObj->encrypt($jsonData); // 加密结果
 
-        $url = self::YM_SMS_ADDR.self::YM_SMS_SEND_URI;
-
         try {
-            $response = $this->httpRequest($url, $sendData);
+            $response = $this->httpRequest(self::YM_SMS_SEND_URI, $sendData);
             $headers = $response->getHeaders();
             if ('SUCCESS' == $headers['result']) {
                 $body = $response->getBody();
@@ -134,9 +132,9 @@ class Sms
     {
         try {
             $client = new Client([
+                'base_uri' => self::YM_SMS_ADDR,
                 'timeout' => 30,
                 'allow_redirects' => false,
-                'proxy' => '192.168.208.220:8888',
             ]);
             $headers = [
                 'appId' => $this->appId,
