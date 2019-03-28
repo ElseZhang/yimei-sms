@@ -71,8 +71,10 @@ class Sms
      * @param string $timerTime
      * @param string $customSmsId
      * @param string $extendedCode
-     * @param int $requestValidPeriod
+     * @param int    $requestValidPeriod
+     *
      * @return bool|string
+     *
      * @throws HttpException
      */
     public function send(string $mobile, string $content,
